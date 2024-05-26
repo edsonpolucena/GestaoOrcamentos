@@ -12,6 +12,7 @@ export const GlobalStyle = createGlobalStyle`
     --primary-color2: rgba(34, 34, 96, 0.6);
     --primary-color3: rgba(34, 34, 96, 0.4);
     --color-green: #42AD00;
+    --color-red: #FF0000;
     --color-grey: #aaa;
     --color-accent: #F56692;
     --color-delete: #ff0000;
@@ -25,5 +26,27 @@ body {
 }
 h1, h2, h3, h4, h5, h6{
     color: var(--primary-color);
+}
+
+.error{
+    color: red;
+    animation: shake 0.5s ease-in-out;
+    @keyframes shake {
+        0%{
+            transform: translatex(0);
+        }
+        25%{
+            transform: translatex(10px);
+        }
+        50%{
+            transform: translatex(-10px);
+        }
+        75%{
+            transform: translatex(10px);
+        }
+        100%{
+            transform: translatex(0);
+        }
+    }
 }
 `;

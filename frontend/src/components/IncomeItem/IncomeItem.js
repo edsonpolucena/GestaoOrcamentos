@@ -88,11 +88,11 @@ function IncomeItem({
                     color={'#fff'}
                     icolor={'#fff'}
                     hcolor={'var(--color-green)'}
-                    onClick={() => deleteItem(id)}
-                    
-                    
-                    
-                    />
+                    o onClick={() => deleteItem(id)}    
+                    title="Excluir item"                
+                    >
+                     Excluir {/* Adicionando texto dentro do botão */}
+                     </Button>
                 </div>
             </div>
         </div>

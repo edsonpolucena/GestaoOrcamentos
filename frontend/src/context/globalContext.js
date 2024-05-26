@@ -9,7 +9,7 @@ export const GlobalProvider = ({children}) => {
 
     const [incomes, setIncomes] = useState([])
     const [expenses, setExpenses] = useState([])
-    const [erros, setError] = useState(null)
+    const [error, setError] = useState(null)
 
     const addIncome = async (income) => {
         const response = await axios.post(`${BASE_URL}add-renda`, income)
@@ -19,7 +19,7 @@ export const GlobalProvider = ({children}) => {
             getIncomes()
 
     }
-    const getIncomes = async (income) => {
+    const getIncomes = async () => {
         const response = await axios.get(`${BASE_URL}get-renda`)
         setIncomes(response.data)
         console.log(response.data)
@@ -50,7 +50,7 @@ export const GlobalProvider = ({children}) => {
             getExpense()
 
     }
-    const getExpense = async (income) => {
+    const getExpense = async () => {
         const response = await axios.get(`${BASE_URL}get-despesa`)
         setExpenses(response.data)
         console.log(response.data)
@@ -72,6 +72,18 @@ export const GlobalProvider = ({children}) => {
         return totalExpense;
     }
 
+    const totalBalance = () => {
+        return totalIncome() - totalExpense()
+    }
+    const transactionHistory = () => {
+        const history = [...incomes, ...expenses]
+        history.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt)
+        })
+
+        return history.slice(0, 3)
+    }
+
     return (
         <GlobalContext.Provider value={{
             addIncome,
@@ -83,7 +95,11 @@ export const GlobalProvider = ({children}) => {
             addExpense,
             getExpense,
             deleteExpense,
-            totalExpense
+            totalExpense,
+            totalBalance,
+            transactionHistory,
+            error, 
+            setError
 
 
 

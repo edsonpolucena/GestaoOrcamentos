@@ -13,7 +13,7 @@ function Dashboard() {
   getIncomes()
   getExpense()
 
- }, [])
+ }, [getIncomes,getExpense])
   return (
     <DashboardStyled>
       <InnerLayout>

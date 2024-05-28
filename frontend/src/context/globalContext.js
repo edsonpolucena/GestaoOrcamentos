@@ -1,80 +1,93 @@
-import React, { useContext, useState } from "react";
-import axios from 'axios';
+import React, { useContext, useState } from "react"
+import axios from 'axios'
+
 
 const BASE_URL = "http://localhost:5000/api/v1/";
+
 
 const GlobalContext = React.createContext()
 
 export const GlobalProvider = ({children}) => {
+
     const [incomes, setIncomes] = useState([])
     const [expenses, setExpenses] = useState([])
     const [error, setError] = useState(null)
 
+    //calculate incomes
     const addIncome = async (income) => {
-        await axios.post(`${BASE_URL}add-renda`, income)
-            .catch((err) => {
+        const response = await axios.post(`${BASE_URL}add-income`, income)
+            .catch((err) =>{
                 setError(err.response.data.message)
-            });
-        getIncomes();
+            })
+        getIncomes()
     }
 
     const getIncomes = async () => {
-        const response = await axios.get(`${BASE_URL}get-renda`);
-        setIncomes(response.data);
-        console.log(response.data);
+        const response = await axios.get(`${BASE_URL}get-incomes`)
+        setIncomes(response.data)
+        console.log(response.data)
     }
 
     const deleteIncome = async (id) => {
-        await axios.delete(`${BASE_URL}delete-renda/${id}`);
-        getIncomes();
+        const res  = await axios.delete(`${BASE_URL}delete-income/${id}`)
+        getIncomes()
     }
 
     const totalIncome = () => {
         let totalIncome = 0;
-        incomes.forEach((income) => {
-            totalIncome += income.amount;
-        });
+        incomes.forEach((income) =>{
+            totalIncome = totalIncome + income.amount
+        })
+
         return totalIncome;
     }
 
+
+    //calculate incomes
     const addExpense = async (income) => {
-        await axios.post(`${BASE_URL}add-despesa`, income)
-            .catch((err) => {
+        const response = await axios.post(`${BASE_URL}add-expense`, income)
+            .catch((err) =>{
                 setError(err.response.data.message)
-            });
-        getExpense();
+            })
+        getExpenses()
     }
 
-    const getExpense = async () => {
-        const response = await axios.get(`${BASE_URL}get-despesa`);
-        setExpenses(response.data);
-        console.log(response.data);
+    const getExpenses = async () => {
+        const response = await axios.get(`${BASE_URL}get-expenses`)
+        setExpenses(response.data)
+        console.log(response.data)
     }
 
     const deleteExpense = async (id) => {
-        await axios.delete(`${BASE_URL}delete-despesa/${id}`);
-        getExpense();
+        const res  = await axios.delete(`${BASE_URL}delete-expense/${id}`)
+        getExpenses()
     }
 
-    const totalExpense = () => {
-        let totalExpense = 0;
-        expenses.forEach((expense) => {
-            totalExpense += expense.amount;
+    const totalExpenses = () => {
+        let totalExpenses = 0;
+        expenses.forEach((expense) =>{
+            if (expense && expense.amount) {
+                totalExpenses = totalExpenses + expense.amount;
+            }
         });
-        return totalExpense;
+    
+        return totalExpenses;
     }
+
 
     const totalBalance = () => {
-        return totalIncome() - totalExpense();
+        return totalIncome() - totalExpenses()
     }
 
     const transactionHistory = () => {
-        const history = [...incomes, ...expenses];
+        const history = [...incomes, ...expenses]
         history.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-        });
-        return history.slice(0, 3);
+            return new Date(b.createdAt) - new Date(a.createdAt)
+        })
+
+        return history.slice(0, 3)
     }
+
 
     return (
         <GlobalContext.Provider value={{
@@ -82,12 +95,12 @@ export const GlobalProvider = ({children}) => {
             getIncomes,
             incomes,
             deleteIncome,
-            totalIncome,
             expenses,
+            totalIncome,
             addExpense,
-            getExpense,
+            getExpenses,
             deleteExpense,
-            totalExpense,
+            totalExpenses,
             totalBalance,
             transactionHistory,
             error,
@@ -98,6 +111,6 @@ export const GlobalProvider = ({children}) => {
     )
 }
 
-export const useGlobalContext = () => {
+export const useGlobalContext = () =>{
     return useContext(GlobalContext)
 }

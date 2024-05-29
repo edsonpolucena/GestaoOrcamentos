@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react"
-import axios from 'axios'
-
+import React, { useContext, useState } from "react";
+import axios from 'axios';
 
 const BASE_URL = "http://localhost:5000/api/v1/";
-
 
 const GlobalContext = React.createContext()
 
@@ -13,72 +11,70 @@ export const GlobalProvider = ({children}) => {
     const [expenses, setExpenses] = useState([])
     const [error, setError] = useState(null)
 
-    //calculate incomes
     const addIncome = async (income) => {
-        const response = await axios.post(`${BASE_URL}add-income`, income)
-            .catch((err) =>{
+        const response = await axios.post(`${BASE_URL}add-renda`, income)
+            .catch((err)=>{
                 setError(err.response.data.message)
             })
-        getIncomes()
-    }
+            getIncomes()
 
+    }
     const getIncomes = async () => {
-        const response = await axios.get(`${BASE_URL}get-incomes`)
+        const response = await axios.get(`${BASE_URL}get-renda`)
         setIncomes(response.data)
         console.log(response.data)
+
     }
 
     const deleteIncome = async (id) => {
-        const res  = await axios.delete(`${BASE_URL}delete-income/${id}`)
+        const res = await axios.delete(`${BASE_URL}delete-renda/${id}`)
         getIncomes()
     }
 
     const totalIncome = () => {
         let totalIncome = 0;
         incomes.forEach((income) =>{
-            totalIncome = totalIncome + income.amount
+            totalIncome += income.amount;
+
         })
 
         return totalIncome;
     }
 
 
-    //calculate incomes
     const addExpense = async (income) => {
-        const response = await axios.post(`${BASE_URL}add-expense`, income)
-            .catch((err) =>{
+        const response = await axios.post(`${BASE_URL}add-despesa`, income)
+            .catch((err)=>{
                 setError(err.response.data.message)
             })
-        getExpenses()
-    }
+            getExpense()
 
-    const getExpenses = async () => {
-        const response = await axios.get(`${BASE_URL}get-expenses`)
+    }
+    const getExpense = async () => {
+        const response = await axios.get(`${BASE_URL}get-despesa`)
         setExpenses(response.data)
         console.log(response.data)
+
     }
 
     const deleteExpense = async (id) => {
-        const res  = await axios.delete(`${BASE_URL}delete-expense/${id}`)
-        getExpenses()
+        const res = await axios.delete(`${BASE_URL}delete-despesa/${id}`)
+        getExpense()
     }
 
-    const totalExpenses = () => {
-        let totalExpenses = 0;
+    const totalExpense = () => {
+        let totalExpense = 0;
         expenses.forEach((expense) =>{
-            if (expense && expense.amount) {
-                totalExpenses = totalExpenses + expense.amount;
-            }
-        });
-    
-        return totalExpenses;
-    }
+            totalExpense += expense.amount;
 
+        })
+
+        return totalExpense;
+    }
 
     const totalBalance = () => {
-        return totalIncome() - totalExpenses()
+        return totalIncome() - totalExpense()
     }
-
     const transactionHistory = () => {
         const history = [...incomes, ...expenses]
         history.sort((a, b) => {
@@ -88,23 +84,25 @@ export const GlobalProvider = ({children}) => {
         return history.slice(0, 3)
     }
 
-
     return (
         <GlobalContext.Provider value={{
             addIncome,
             getIncomes,
             incomes,
             deleteIncome,
-            expenses,
             totalIncome,
+            expenses,
             addExpense,
-            getExpenses,
+            getExpense,
             deleteExpense,
-            totalExpenses,
+            totalExpense,
             totalBalance,
             transactionHistory,
-            error,
+            error, 
             setError
+
+
+
         }}>
             {children}
         </GlobalContext.Provider>

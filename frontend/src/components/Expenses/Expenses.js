@@ -6,12 +6,12 @@ import ExpenseForm from './ExpenseForm';
 import IncomeItem from '../IncomeItem/IncomeItem';
 
 function Expenses() {
-  const {expenses, getExpense, deleteExpense, totalExpense} = useGlobalContext()
+  const {addIncome, expenses, getExpense, deleteExpense, totalExpense} = useGlobalContext()
 
   useEffect(() =>{
     getExpense()
 
-  }, [getExpense])
+  }, [expenses])
   return (
     <ExpenseStyled>
         <InnerLayout>

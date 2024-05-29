@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {InnerLayout} from '../../styles/layouts';
@@ -13,7 +14,7 @@ function Dashboard() {
   getIncomes()
   getExpense()
 
- }, [getIncomes,getExpense])
+ }, [])
   return (
     <DashboardStyled>
       <InnerLayout>
